@@ -213,22 +213,7 @@ Uma unica maquina com um container Node.js e um PostgreSQL nao suportaria com se
 
 Para 100 mil requisicoes simultaneas, o dimensionamento deve partir de testes de carga e metas explicitas de latencia/ disponibilidade. O numero de usuarios cadastrados nao equivale ao numero de requisicoes por segundo. A capacidade final depende do perfil de uso, tamanho dos pedidos, consultas, banco, rede e infraestrutura contratada.
 
-## 9. Publicar no GitHub
-
-Crie um repositorio vazio no GitHub. Dentro da pasta do projeto, execute:
-
-```bash
-git init
-git add .
-git commit -m "feat: primeira versao do EstuLanches"
-git branch -M main
-git remote add origin https://github.com/SEU-USUARIO/estulanches.git
-git push -u origin main
-```
-
-Troque `SEU-USUARIO` pelo seu usuario do GitHub. Confira na pagina do repositorio que `Dockerfile`, `docker-compose.yml`, codigo, testes, README, roteiro e `Ficha-RDM.pdf` foram publicados. O `.env` nao deve aparecer no repositorio.
-
-## 10. Encerrar ambiente
+## 9. Encerrar ambiente
 
 ```bash
 docker compose down
