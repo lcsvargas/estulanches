@@ -1,0 +1,107 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-estulanches}
+      POSTGRES_USER: ${POSTGRES_USER:-estu_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no arquivo .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # A porta do banco fica acessivel somente pela propria maquina, nunca pela rede publica.
+    ports:
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-estu_app} -d ${POSTGRES_DB:-estulanches}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - estu-internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  app:
+    build:
+      context: .
+      target: production
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgres://${POSTGRES_USER:-estu_app}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-estulanches}
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no arquivo .env}
+      ADMIN_NAME: ${ADMIN_NAME:-Administrador da Cantina}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@estulanches.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Defina ADMIN_PASSWORD no arquivo .env}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      start_period: 25s
+      retries: 3
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - estu-internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Banco isolado e descartavel para testes de integracao.
+  db-test:
+    image: postgres:17-alpine
+    profiles: ["test"]
+    environment:
+      POSTGRES_DB: estulanches_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password_only_local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d estulanches_test"]
+      interval: 3s
+      timeout: 5s
+      retries: 15
+    networks:
+      - estu-test
+
+  tests:
+    profiles: ["test"]
+    build:
+      context: .
+      target: test
+    environment:
+      NODE_ENV: test
+      TEST_DATABASE_URL: postgres://test_user:test_password_only_local@db-test:5432/estulanches_test
+      JWT_SECRET: test-secret-that-is-long-enough-for-automated-tests
+      ADMIN_NAME: Administrador de Teste
+      ADMIN_EMAIL: admin@test.local
+      ADMIN_PASSWORD: Teste_Seguro_123
+    depends_on:
+      db-test:
+        condition: service_healthy
+    networks:
+      - estu-test
+
+volumes:
+  postgres_data:
+
+networks:
+  estu-internal:
+    driver: bridge
+  estu-test:
+    driver: bridge

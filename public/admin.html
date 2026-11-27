@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#143e33">
+  <meta name="description" content="Painel de gestao da cantina EstuLanches.">
+  <title>Equipe | EstuLanches</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/admin.js" defer></script>
+</head>
+<body class="admin-body">
+  <section class="login-page" id="login-page">
+    <div class="login-visual">
+      <a class="brand" href="/"><span class="brand-mark">E<span>.</span></span><span class="brand-name">estu<span>lanches</span></span></a>
+      <div class="login-visual-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> AREA DA EQUIPE</div>
+        <h1>Por tras de<br>um bom <em>intervalo.</em></h1>
+        <p>Organize os pedidos, atualize o cardapio e deixe a rotina da cantina mais simples.</p>
+      </div>
+      <div class="login-visual-foot">ESTULANCHES · PAINEL DE GESTAO</div>
+    </div>
+    <div class="login-card-wrap">
+      <form class="login-card" id="login-form">
+        <div class="eyebrow"><span class="eyebrow-line"></span> ACESSO RESTRITO</div>
+        <h2>Bem-vindo de volta.</h2>
+        <p>Entre com suas credenciais para continuar.</p>
+        <div class="login-field"><label for="login-email">E-mail</label><input id="login-email" name="email" type="email" placeholder="admin@escola.edu.br" autocomplete="username" required maxlength="180"></div>
+        <div class="login-field"><label for="login-password">Senha</label><input id="login-password" name="password" type="password" placeholder="Sua senha de acesso" autocomplete="current-password" required maxlength="200"></div>
+        <button class="button button-dark button-full" id="login-submit" type="submit">Entrar no painel <span>→</span></button>
+        <p class="login-error" id="login-error" role="alert"></p>
+        <a class="login-back" href="/">← Voltar para o cardapio</a>
+      </form>
+    </div>
+  </section>
+
+  <div class="admin-shell hidden" id="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="brand" href="/"><span class="brand-mark">E<span>.</span></span><span class="brand-name">estu<span>lanches</span></span></a>
+      <div class="sidebar-label">GESTAO DA CANTINA</div>
+      <nav class="sidebar-nav" aria-label="Menu administrativo">
+        <button class="active" type="button" data-view="dashboard"><span>▦</span> Visao geral</button>
+        <button type="button" data-view="orders"><span>☷</span> Pedidos</button>
+        <button type="button" data-view="products"><span>◈</span> Produtos</button>
+      </nav>
+      <div class="sidebar-bottom"><p>Controle simples para uma cantina que nao para.</p><a href="/">↗ Abrir cardapio publico</a></div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div class="admin-breadcrumb">EstuLanches <span> / </span> <strong id="breadcrumb-current">Visao geral</strong></div>
+        <div class="admin-user"><div class="admin-avatar" id="admin-avatar">A</div><div class="admin-user-text"><strong id="admin-name">Administrador</strong><small>Equipe da cantina</small></div><button type="button" class="table-action" id="logout-button">Sair</button></div>
+      </header>
+
+      <div class="admin-content">
+        <section class="admin-view" id="view-dashboard">
+          <div class="admin-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> RESUMO DA OPERACAO</div><h1>Visao geral</h1><p>Acompanhe o movimento da cantina em um so lugar.</p></div><div class="admin-date" id="current-date"></div></div>
+          <div class="admin-stats">
+            <article class="stat-card"><div class="stat-top">Pedidos registrados <span class="stat-icon">☷</span></div><div class="stat-value" id="stat-total">—</div><div class="stat-foot">Desde o inicio da operacao</div></article>
+            <article class="stat-card"><div class="stat-top">Aguardando preparo <span class="stat-icon">◷</span></div><div class="stat-value" id="stat-received">—</div><div class="stat-foot">Pedidos recebidos</div></article>
+            <article class="stat-card"><div class="stat-top">Em preparo <span class="stat-icon">⌁</span></div><div class="stat-value" id="stat-preparing">—</div><div class="stat-foot">Na cozinha agora</div></article>
+            <article class="stat-card"><div class="stat-top">Vendas de hoje <span class="stat-icon">R$</span></div><div class="stat-value" id="stat-today">—</div><div class="stat-foot">Pedidos nao cancelados</div></article>
+          </div>
+          <section class="admin-panel">
+            <div class="panel-heading"><div><h2>Pedidos recentes</h2><p>Os ultimos pedidos enviados pelo cardapio.</p></div><button class="small-button" type="button" data-go="orders">Ver todos ↗</button></div>
+            <div class="orders-list" id="recent-orders"><div class="empty-state">Carregando pedidos...</div></div>
+          </section>
+        </section>
+
+        <section class="admin-view hidden" id="view-orders">
+          <div class="admin-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> FLUXO DA CANTINA</div><h1>Pedidos</h1><p>Consulte os pedidos e atualize o andamento de cada um.</p></div><div class="admin-date">Atualize o status conforme o preparo</div></div>
+          <section class="admin-panel"><div class="panel-heading"><div><h2>Todos os pedidos</h2><p>Exibindo os 100 mais recentes.</p></div><div class="panel-actions"><select id="order-filter" class="small-button" aria-label="Filtrar pedidos"><option value="">Todos os status</option><option value="recebido">Recebido</option><option value="preparando">Preparando</option><option value="pronto">Pronto</option><option value="entregue">Entregue</option><option value="cancelado">Cancelado</option></select><button class="small-button" id="refresh-orders" type="button">Atualizar ↻</button></div></div><div class="orders-list" id="all-orders"><div class="empty-state">Carregando pedidos...</div></div></section>
+        </section>
+
+        <section class="admin-view hidden" id="view-products">
+          <div class="admin-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> CARDAPIO DIGITAL</div><h1>Produtos</h1><p>Cadastre itens e controle o que aparece no cardapio publico.</p></div><button class="small-button primary" id="add-product" type="button">＋ Novo produto</button></div>
+          <section class="admin-panel"><div class="panel-heading"><div><h2>Catalogo da cantina</h2><p>Produtos inativos ficam ocultos para os estudantes.</p></div><button class="small-button" id="refresh-products" type="button">Atualizar ↻</button></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>PRODUTO</th><th>CATEGORIA</th><th>PRECO</th><th>DISPONIBILIDADE</th><th>ACOES</th></tr></thead><tbody id="products-table"><tr><td colspan="5"><div class="empty-state">Carregando produtos...</div></td></tr></tbody></table></div></section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <dialog class="product-dialog" id="product-dialog">
+    <div class="dialog-head"><h2 id="product-dialog-title">Novo produto</h2><button class="dialog-close" type="button" id="close-product-dialog" aria-label="Fechar">×</button></div>
+    <form id="product-form">
+      <div class="product-field"><label for="product-name">Nome</label><input id="product-name" name="name" required minlength="2" maxlength="100" placeholder="Ex.: Pao de queijo"></div>
+      <div class="product-field"><label for="product-description">Descricao</label><textarea id="product-description" name="description" rows="2" maxlength="280" placeholder="Uma descricao curta para o cardapio"></textarea></div>
+      <div class="dialog-grid">
+        <div class="product-field"><label for="product-category">Categoria</label><input id="product-category" name="category" required minlength="2" maxlength="50" placeholder="Lanches"></div>
+        <div class="product-field"><label for="product-price">Preco (R$)</label><input id="product-price" name="price" type="number" min="0.01" max="10000" step="0.01" required placeholder="5,00"></div>
+      </div>
+      <div class="dialog-grid">
+        <div class="product-field"><label for="product-emoji">Icone / emoji</label><input id="product-emoji" name="emoji" maxlength="12" value="🥪"></div>
+        <div class="product-field"><label for="product-availability">Disponibilidade</label><select id="product-availability" name="active"><option value="true">Disponivel</option><option value="false">Indisponivel</option></select></div>
+      </div>
+      <p class="login-error" id="product-error" role="alert"></p>
+      <div class="dialog-actions"><button class="small-button" type="button" id="cancel-product">Cancelar</button><button class="small-button primary" type="submit" id="save-product">Salvar produto</button></div>
+    </form>
+  </dialog>
+  <div class="admin-toast" id="admin-toast" role="status"></div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123d32">
+  <meta name="description" content="Consulte o cardapio da cantina e faca seu pedido online com o EstuLanches.">
+  <title>EstuLanches | Seu intervalo, do seu jeito</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/app.js" defer></script>
+</head>
+<body class="public-page">
+  <div class="announcement"><span class="announcement-dot"></span> CARDAPIO DIGITAL <span class="announcement-separator">/</span> PEDIDOS SEM FILA</div>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="EstuLanches - inicio">
+      <span class="brand-mark">E<span>.</span></span>
+      <span class="brand-name">estu<span>lanches</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Navegacao principal">
+      <a href="#cardapio">Cardapio</a>
+      <a href="#como-funciona">Como funciona</a>
+    </nav>
+    <a class="header-link" href="/admin">Area da equipe <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> A CANTINA NO SEU RITMO</div>
+        <h1 id="hero-title">Seu intervalo.<br><em>Seu lanche.</em><br>Sem fila.</h1>
+        <p>Escolha o que vai comer, envie seu pedido e aproveite melhor cada minuto do recreio.</p>
+        <a class="button button-primary" href="#cardapio">Explorar cardapio <span aria-hidden="true">↓</span></a>
+        <div class="hero-footnote"><span class="footnote-icon">✳</span> Simples para pedir. Mais facil para organizar.</div>
+      </div>
+      <div class="hero-art" aria-label="Ilustracao de lanches e bebidas" role="img">
+        <div class="art-orbit orbit-one"></div>
+        <div class="art-orbit orbit-two"></div>
+        <div class="art-sticker sticker-top">FEITO PRA<br>PAUSA <span>✳</span></div>
+        <div class="food-card food-card-main">
+          <div class="food-emoji">🥪</div>
+          <div class="food-card-caption"><span>O CLASSICO DO RECREIO</span><strong>Um intervalo<br>bem aproveitado.</strong></div>
+        </div>
+        <div class="food-card food-card-small"><span>🍊</span><div><b>Refresca</b><small>e recarrega</small></div></div>
+        <div class="art-sticker sticker-bottom">BOM<br>INTERVALO!</div>
+        <span class="art-spark spark-one">✳</span><span class="art-spark spark-two">✳</span>
+      </div>
+    </section>
+
+    <section class="benefit-strip" id="como-funciona">
+      <div><span class="benefit-number">01</span><div><strong>Escolha</strong><small>Veja as opcoes do dia.</small></div></div>
+      <div><span class="benefit-number">02</span><div><strong>Peca</strong><small>Informe seu nome e turma.</small></div></div>
+      <div><span class="benefit-number">03</span><div><strong>Retire</strong><small>Apresente seu codigo na cantina.</small></div></div>
+      <div class="strip-note">BOM APETITE <span>↗</span></div>
+    </section>
+
+    <section class="ordering-section" id="cardapio">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-line"></span> ESCOLHA O SEU</div>
+          <h2>Cardapio <em>do dia</em></h2>
+          <p>Tem coisa boa esperando por voce.</p>
+        </div>
+        <div class="menu-status"><span class="status-pulse"></span> <span id="menu-status-text">Carregando cardapio...</span></div>
+      </div>
+
+      <div class="ordering-layout">
+        <div class="menu-column">
+          <div class="category-filters" id="category-filters" aria-label="Filtrar por categoria">
+            <button class="filter-chip active" type="button" data-category="all">Tudo</button>
+          </div>
+          <div class="product-grid" id="product-grid" aria-live="polite">
+            <div class="loading-card"><span class="loading-spinner"></span><p>Buscando as delicias...</p></div>
+          </div>
+          <div class="menu-error hidden" id="menu-error">
+            <strong>O cardapio nao carregou.</strong>
+            <p>Confira sua conexao e tente novamente.</p>
+            <button class="text-button" id="retry-menu" type="button">Tentar novamente ↗</button>
+          </div>
+        </div>
+
+        <aside class="cart-panel" aria-labelledby="cart-title">
+          <div class="cart-header"><div><span class="eyebrow eyebrow-small">SEU PEDIDO</span><h3 id="cart-title">Sacola <span id="cart-count">(0)</span></h3></div><span class="cart-icon">↗</span></div>
+          <div class="cart-empty" id="cart-empty"><div class="empty-bag">＋</div><strong>Sua sacola esta vazia</strong><p>Adicione algum item do cardapio para comecar.</p></div>
+          <div class="cart-items" id="cart-items"></div>
+          <div class="cart-total"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div>
+          <form id="order-form" class="order-form">
+            <label for="customer-name">Seu nome</label>
+            <input id="customer-name" name="customerName" type="text" maxlength="100" placeholder="Como podemos te chamar?" autocomplete="name" required>
+            <label for="classroom">Turma / sala</label>
+            <input id="classroom" name="classroom" type="text" maxlength="40" placeholder="Ex.: 2º ADS - A" required>
+            <label for="order-notes">Observacao <span>(opcional)</span></label>
+            <textarea id="order-notes" name="notes" rows="2" maxlength="300" placeholder="Algum detalhe sobre o pedido?"></textarea>
+            <button class="button button-dark button-full" id="submit-order" type="submit" disabled>Enviar pedido <span aria-hidden="true">→</span></button>
+            <p class="form-disclaimer">O pedido sera enviado para a equipe da cantina. O pagamento e a retirada sao combinados no local.</p>
+            <p class="form-feedback" id="order-feedback" role="status"></p>
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <section class="closing-banner">
+      <div><span class="eyebrow eyebrow-light">UM INTERVALO MAIS TRANQUILO</span><h2>Menos fila.<br><em>Mais recreio.</em></h2></div>
+      <a href="#cardapio" class="banner-link">Voltar ao cardapio <span>↑</span></a>
+      <div class="banner-doodle">✳</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand brand-footer" href="/"><span class="brand-mark">E<span>.</span></span><span class="brand-name">estu<span>lanches</span></span></a>
+    <p>Feito para deixar o intervalo mais leve.</p>
+    <span class="footer-copy">ESTULANCHES · 2026</span>
+  </footer>
+
+  <dialog class="confirmation-dialog" id="confirmation-dialog">
+    <div class="confirmation-mark">✓</div>
+    <span class="eyebrow eyebrow-small">PEDIDO ENVIADO</span>
+    <h2>Ta combinado!</h2>
+    <p>Seu pedido chegou para a cantina. Guarde o codigo abaixo para identificar seu pedido na retirada.</p>
+    <div class="order-code" id="confirmation-code">--------</div>
+    <div class="confirmation-total"><span>Total do pedido</span><strong id="confirmation-total">R$ 0,00</strong></div>
+    <button class="button button-dark button-full" id="close-confirmation" type="button">Fechar</button>
+  </dialog>
+</body>
+</html>
